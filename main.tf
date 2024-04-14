@@ -70,6 +70,20 @@ resource "aws_security_group" "hashicat" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  ingress {
+    cidr_blocks = [
+      "0.0.0.0/0",
+    ]
+    description      = ""
+    from_port        = 8080
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = []
+    self             = false
+    to_port          = 8080
+  }
+
   egress {
     from_port       = 0
     to_port         = 0
@@ -121,19 +135,19 @@ data "aws_ami" "ubuntu" {
 }
 
 resource "aws_eip" "hashicat" {
-  count = var.ec2_count
+  count    = var.ec2_count
   instance = aws_instance.hashicat[count.index].id
   vpc      = true
 }
 
 resource "aws_eip_association" "hashicat" {
-  count = var.ec2_count
+  count         = var.ec2_count
   instance_id   = aws_instance.hashicat[count.index].id
   allocation_id = aws_eip.hashicat[count.index].id
 }
 
 resource "aws_instance" "hashicat" {
-  count = var.ec2_count
+  count                       = var.ec2_count
   ami                         = data.aws_ami.ubuntu.id
   instance_type               = var.instance_type
   key_name                    = aws_key_pair.hashicat.key_name
