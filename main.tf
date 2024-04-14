@@ -122,7 +122,7 @@ data "aws_ami" "ubuntu" {
 
 resource "aws_eip" "hashicat" {
   count = var.ec2_count
-  instance = aws_instance.hashicat[count.index]
+  instance = aws_instance.hashicat[count.index].id
   vpc      = true
 }
 
@@ -159,6 +159,7 @@ resource "aws_instance" "hashicat" {
 # Add execute permissions to our scripts.
 # Run the deploy_app.sh script.
 resource "null_resource" "configure_cat_app" {
+  count = var.ec2_count
   depends_on = [aws_eip_association.hashicat]
 
   // triggers = {
@@ -173,7 +174,7 @@ resource "null_resource" "configure_cat_app" {
       type        = "ssh"
       user        = "ubuntu"
       private_key = tls_private_key.hashicat.private_key_pem
-      host        = aws_eip.hashicat[count.index]
+      host        = aws_eip.hashicat[count.index].public_ip
     }
   }
 
