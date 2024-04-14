@@ -121,16 +121,19 @@ data "aws_ami" "ubuntu" {
 }
 
 resource "aws_eip" "hashicat" {
+  count = var.ec2_count
   instance = aws_instance.hashicat.id
   vpc      = true
 }
 
 resource "aws_eip_association" "hashicat" {
-  instance_id   = aws_instance.hashicat.id
-  allocation_id = aws_eip.hashicat.id
+  count = var.ec2_count
+  instance_id   = aws_instance.hashicat[count.index].id
+  allocation_id = aws_eip.hashicat[count.index].id
 }
 
 resource "aws_instance" "hashicat" {
+  count = var.ec2_count
   ami                         = data.aws_ami.ubuntu.id
   instance_type               = var.instance_type
   key_name                    = aws_key_pair.hashicat.key_name
