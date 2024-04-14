@@ -1,6 +1,6 @@
 terraform {
   cloud {
-    organization = "hjyoo"
+    organization = "<MY-ORG>"
     hostname     = "app.terraform.io" # default
 
     workspaces {
@@ -155,7 +155,7 @@ resource "aws_instance" "hashicat" {
 # Set up some environment variables for our script.
 # Add execute permissions to our scripts.
 # Run the deploy_app.sh script.
-resource "null_resource" "configure_cat_app" {
+resource "null_resource" "configure-cat-app" {
   depends_on = [aws_eip_association.hashicat]
 
   // triggers = {
