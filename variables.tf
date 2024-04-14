@@ -1,3 +1,13 @@
+variable "ec2_count" {
+  default = "1"
+  type = number
+
+  validation {
+    condition = var.ec2_count > 0
+    error_message = "The ec2_count value cannot set Zero"
+  }
+}
+
 variable "prefix" {
   description = "This prefix will be included in the name of most resources."
 }
