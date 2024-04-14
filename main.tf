@@ -197,7 +197,7 @@ resource "null_resource" "configure_cat_app" {
       type        = "ssh"
       user        = "ubuntu"
       private_key = tls_private_key.hashicat.private_key_pem
-      host        = aws_eip.hashicat.public_ip
+      host        = aws_eip.hashicat[count.index].public_ip
     }
   }
 }
